@@ -147,8 +147,18 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
+# Build the STATICFILES_DIRS list dynamically, only including directories that exist
+_staticfiles_dirs = [
     os.path.join(BASE_DIR, 'frontend/static'),
-    os.path.join(BASE_DIR, 'frontend/build'),
-    os.path.join(BASE_DIR, 'frontend/build/static'),
 ]
+
+# Add build directories if they exist
+_frontend_build = os.path.join(BASE_DIR, 'frontend/build')
+_frontend_build_static = os.path.join(BASE_DIR, 'frontend/build/static')
+
+if os.path.exists(_frontend_build):
+    _staticfiles_dirs.append(_frontend_build)
+if os.path.exists(_frontend_build_static):
+    _staticfiles_dirs.append(_frontend_build_static)
+
+STATICFILES_DIRS = _staticfiles_dirs
